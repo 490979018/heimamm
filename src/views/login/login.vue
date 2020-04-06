@@ -43,15 +43,8 @@
         <el-form-item>
           <el-button type="primary" @click="submitForm()" class="btn">登录</el-button>
           <br>
-          <el-button type="primary" class="btn" @click="dialogFormVisible = true">注册</el-button>
-          <!-- 这个是模态框的总结构 -->
-          <el-dialog  :visible.sync="dialogFormVisible" :show-close="false">
-            <div slot='title' class="register">用户注册</div>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-            </div>
-          </el-dialog>
+          <el-button type="primary" class="btn" @click="$refs.registerCom.dialogFormVisible=true">注册</el-button>
+          <register ref="registerCom"></register>
         </el-form-item>
       </el-form>
 
@@ -65,14 +58,15 @@
 </template>
 
 <script>
+import register from './register.vue';
 export default {
+  components:{
+    register, 
+  },
   name: "login",
   data() {
     return {
-      //   userName: "",
-      //   password: "",
       isShow: true,
-      //   codeInt:"",
       form: {
         tel: "",
         password: "",
@@ -93,7 +87,6 @@ export default {
           {min:4,max:4,message:"请输入4位正确验证码",trigger:"change",}
         ]
       },
-      dialogFormVisible:false,
     };
   },
   methods:{
@@ -110,7 +103,9 @@ export default {
       resetForm() {
         this.$refs.form.resetFields();
       },
-      
+      // dialog(){
+      //   this.$refs.registerCom.dialogFormVisible=true;
+      // },
   }
 };
 </script>
@@ -166,12 +161,9 @@ export default {
     .link{
       line-height: 20px;
     }
-    .register{
-      text-align: center;
-      font-size: 18px;
-      background-color: skyblue;
-      width: 100%;
-    }
+    // .el-dialog__header{
+    // padding: 0;
+    // }
   }
 }
 </style>
