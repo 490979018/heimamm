@@ -57,8 +57,7 @@
 
 <script>
 import register from './register.vue';
-// import {saveToken} from '@/utilis/token.js';
-import {removeToken} from '@/utilis/token.js';
+import {saveToken} from '@/utilis/token.js';
 import {userLogin} from '@/api/login.js';
 export default {
   components:{
@@ -117,8 +116,8 @@ export default {
             // this.$message.success('你好呀小可爱');
             userLogin(this.form).then((res)=>{
               console.log(res);
-              removeToken('5e8ed0dfa7319');
-              // saveToken('token',res.data.data.token);
+              saveToken('token',res.data.data.token);
+              this.$router.push('/home').catch(err=>err);
             })
           } else {
             // this.$message.error('账号或密码错误');
