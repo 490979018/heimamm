@@ -14,21 +14,23 @@ const router= new vueRouter({
     routes:[
         {path:'/login',component:login},
         {path:'/home',redirect:'/home/chart',  component:layout,children:[
-            {path:'chart',component:chart},
-            {path:'userList',component:userList},
-            {path:'question',component:question},
-            {path:'business',component:business},
-            {path:'subject',component:subject},
+            {path:'chart',component:chart,meta:{title:"数据列表"}},
+            {path:'userList',component:userList,meta:{title:"用户列表"}},
+            {path:'question',component:question,meta:{title:"题库列表"}},
+            {path:'business',component:business,meta:{title:"企业列表"}},
+            {path:'subject',component:subject,meta:{title:"学科列表"}},
         ]},
     ]
 });
 router.beforeEach((to,from,next)=>{
     Nprogress.start();
+    
     setTimeout(()=>{
         next();
     },1000)
 })
-router.afterEach(()=>{
+router.afterEach((to,)=>{
+    document.title=to.meta.title;
     Nprogress.done();
 })
 

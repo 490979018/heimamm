@@ -1,5 +1,8 @@
 <template>
-  <div class="subject">学科列表</div>
+  <div class="subject">
+    学科列表
+    {{$store.state.firstData}}
+  </div>
 </template>
 
 <script>

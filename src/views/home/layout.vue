@@ -63,7 +63,7 @@ export default {
       userName: "",
       isCollapse:false,
       inPath:"",
-
+      userInfo:"",
     };
   },
   methods: {
@@ -88,9 +88,10 @@ export default {
   },
   created: function() {
     getUserInfo().then(res => {
-    //   console.log(res);
-      this.imgUrl = this.baseUrl + "/" + res.data.data.avatar;
-      this.userName = res.data.data.username;
+      console.log(res);
+      this.$store.state.userInfo=res.data.data;
+      this.imgUrl = this.baseUrl + "/" + this.$store.state.userInfo.avatar;
+      this.userName = this.$store.state.userInfo.username;
     });
     this.inPath=this.$route.fullPath;
   }

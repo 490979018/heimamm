@@ -1,7 +1,8 @@
-import axios from 'axios';
+
 import {getToken,removeToken} from '@/utilis/token.js';
 import {Message} from 'element-ui';
 import Router from '@/router/router.js'
+import axios from 'axios';
 let instance=axios.create({
     baseURL:process.env.VUE_APP_URL,
     withCredentials: true
@@ -27,10 +28,7 @@ instance.interceptors.request.use(function (config) {
 // 统一的进行一些处理，比如异常的错误提示
 // 如果不想要额外的.data 可以在return的时候 把.data拿掉
 instance.interceptors.response.use(function (response) {
-    // console.log('响应拦截器')
-    // console.log(response)
     // 可以对响应的值进行一些处理
-    // return response;
     if(response.data.code==200){
         return response;
     }else if(response.data.code==206){
@@ -39,8 +37,6 @@ instance.interceptors.response.use(function (response) {
         removeToken('token');
         return Promise.reject('error');
     }
-    
-    
     else{
         Message.error(response.data.message);
         return Promise.reject('error');
