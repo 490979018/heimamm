@@ -88,7 +88,7 @@ export default {
   },
   created: function() {
     getUserInfo().then(res => {
-      console.log(res);
+      // console.log(res);
       this.$store.state.userInfo=res.data.data;
       this.imgUrl = this.baseUrl + "/" + this.$store.state.userInfo.avatar;
       this.userName = this.$store.state.userInfo.username;
@@ -145,8 +145,10 @@ export default {
     .menuTransition:not(.el-menu--collapse) {
     // 初始宽度
     width: 160px;
-    
+   }
   }
+  .main{
+    background-color: #E8E9EC;
   }
 }
 </style>

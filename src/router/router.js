@@ -12,8 +12,8 @@ import 'nprogress/nprogress.css';
 Vue.use(vueRouter);
 const router= new vueRouter({
     routes:[
-        {path:'/login',component:login},
-        {path:'/home',redirect:'/home/chart',  component:layout,children:[
+        {path:'/login',component:login,meta:{title:"登录页"}},
+        {path:'/home',redirect:'/home/subject',  component:layout,children:[
             {path:'chart',component:chart,meta:{title:"数据列表"}},
             {path:'userList',component:userList,meta:{title:"用户列表"}},
             {path:'question',component:question,meta:{title:"题库列表"}},
@@ -27,7 +27,7 @@ router.beforeEach((to,from,next)=>{
     
     setTimeout(()=>{
         next();
-    },1000)
+    },200)
 })
 router.afterEach((to,)=>{
     document.title=to.meta.title;
