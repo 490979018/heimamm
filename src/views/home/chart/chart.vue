@@ -1,5 +1,7 @@
 <template>
-  <div class="chart">数据列表</div>
+  <div class="chart">数据列表
+  </div>
+  
 </template>
 
 <script>
