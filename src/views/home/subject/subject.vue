@@ -40,7 +40,7 @@
 
     <el-card class="secCard">
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column label="序号" width="50">
+        <el-table-column label="序号" width="80">
           <template slot-scope="scope">{{(pagination.currentPage-1)*pagination.size+scope.$index+1}}</template>
         </el-table-column>
 
