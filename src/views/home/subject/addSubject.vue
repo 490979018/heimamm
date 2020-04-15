@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="dialogFormVisible" :show-close="false" width="600px" class="addSubject">
-    <div slot="title" class="title">新增学科</div>
+    <div slot="title" class="title">{{mode=='add'?"新增学科":"编辑学科"}}</div>
     <el-form label-width="100px" :model="form" ref="form" :rules="rules">
         
         <el-form-item label="学科编号" style="width:95%" prop="rid" >
@@ -97,8 +97,8 @@ export default {
   watch:{
       dialogFormVisible(newVal){
           if(newVal==false){
-              this.$refs.form.resetFields();
               
+              this.$refs.form.resetFields();
           }
       }
   }

@@ -149,7 +149,7 @@ export default {
     changeStatus(id){
       switchStatus({id:id}).then(()=>{
         this.$message.success("状态设置成功");
-        this.search();
+        this.getData();
       })
     },
     addBlock(){

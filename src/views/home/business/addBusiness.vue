@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="dialogFormVisible" :show-close="false" width="600px" class="addBusiness">
-    <div slot="title" class="title">新增企业</div>
+    <div slot="title" class="title">{{mode=='add'?"新增企业":"编辑企业"}}</div>
     <el-form :model="form" ref="form" label-width="100px" :rules="rules">
 
         <el-form-item label="企业编号" style="width:95%" prop="eid">
