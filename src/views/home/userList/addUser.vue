@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync="dialogFormVisible" :show-close="false" width="600px" class="addUser">
-    <div slot="title" class="title">新增用户</div>
+    <div slot="title" class="title">{{mode=="add"?"新增用户":"编辑用户"}}</div>
 
     <el-form label-width="100px" :model="form" ref="form" :rules="rules">
 
@@ -18,24 +18,18 @@
 
         <el-form-item label="角色" style="width:95%"  prop="role_id">
             <el-select v-model="form.role_id">
-                <el-option value="2" label="管理员">
+              <el-option v-for="(value,key,index) in $store.state.roleObj" :key='index' :value='+key' :label="value">
 
-                </el-option>
-                <el-option value="3" label="学生">
-
-                </el-option>
-                <el-option value="4" label="老师">
-
-                </el-option>
+              </el-option>
             </el-select>
         </el-form-item>
 
         <el-form-item label="状态" style="width:95%"  prop="status">
             <el-select v-model="form.status">
-                <el-option value="0" label="禁用">
+                <el-option :value="0" label="禁用">
 
                 </el-option>
-                <el-option value="1" label="启用">
+                <el-option :value="1" label="启用">
 
                 </el-option>
             </el-select>
@@ -47,13 +41,6 @@
 
     </el-form>
 
-
-
-
-
-
-
-
     <div slot="footer" class="footer">
         <el-button @click="dialogFormVisible=false">取消</el-button>
         <el-button type="primary" @click="submitForm">确定</el-button>
@@ -62,10 +49,33 @@
 </template>
 
 <script>
+import {addUser,editUser} from '@/api/addUser.js';
 export default {
+  props:{
+    mode:{
+      type:String
+    }
+  },
   data() {
+  var validateEmail=(rule,value,callback)=>{
+    let _test=/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+    if(_test.test(value)){
+      callback();
+    }else{
+      callback("请输入正确邮箱地址");
+    }
+  };
+  var validatePhone=(rule,value,callback)=>{
+    let _test=/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+    if(_test.test(value)){
+      callback();
+    }else{
+      callback("请输入正确手机号码");
+    }
+  };
     return {
-      dialogFormVisible: true,
+      
+      dialogFormVisible: false,
       form:{
           username:"",
           email:"",
@@ -76,8 +86,8 @@ export default {
       },
       rules:{
           username:[{required:true,message:"请输入用户名",trigger:"change"}],
-          email:[{required:true,message:"请输入邮箱地址",trigger:"change"}],
-          phone:[{required:true,message:"请输入手机号码",trigger:"change"}],
+          email:[{required:true,validator:validateEmail,trigger:"change"}],
+          phone:[{required:true,validator:validatePhone,trigger:"change"}],
           role_id:[{required:true,message:"请输入角色",trigger:"change"}],
           status:[{required:true,message:"请输入状态",trigger:"change"}],
           remark:[{required:true,message:"请输入用户备注",trigger:"change"}],
@@ -87,9 +97,32 @@ export default {
   methods:{
       submitForm(){
           this.$refs.form.validate((res)=>{
-            console.log(res);
+            if(res){
+              if(this.mode=="add"){
+                addUser(this.form).then(()=>{
+                  this.$message.success("新增用户成功");
+                  this.dialogFormVisible=false;
+                  this.$emit('sonSearch');
+                })
+              }else{
+                editUser(this.form).then(()=>{
+                  this.$message.success("编辑用户成功");
+                  this.dialogFormVisible=false;
+                  this.$emit('sonSearch');
+                })
+              }
+            }
           })
       }
+  },
+  watch:{
+    dialogFormVisible(newVal){
+      if(newVal==true){
+        this.$nextTick(()=>{
+          this.$refs.form.clearValidate();
+        })
+      }
+    }
   }
 };
 </script>

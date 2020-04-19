@@ -75,8 +75,8 @@ export default {
           this.$refs.form.validate((result)=>{
               if(result){
                   if(this.mode=='add'){
-                    addSub(this.form).then((res)=>{
-                    console.log(res);
+                    addSub(this.form).then(()=>{
+                    // console.log(res);
                     //   this.$parent.search();
                     this.dialogFormVisible=false;
                     this.$emit('addSubject');

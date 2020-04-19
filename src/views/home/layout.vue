@@ -18,8 +18,12 @@
     </el-header>
     <el-container>
       <el-aside  class="aside" width="auto" >
-        <el-menu :router="true" :default-active="inPath" :collapse="isCollapse" class="menuTransition">
-          <el-menu-item index="/home/chart">
+        <el-menu :router="true" :default-active="$route.fullPath" :collapse="isCollapse" class="menuTransition">
+          <el-menu-item :index="'/home/'+ele.path" v-for="(ele,index) in $router.options.routes[1].children" :key="index" v-show="ele.meta.rules.includes($store.state.role)">
+            <i :class="ele.meta.icon"></i>
+            <span slot="title">{{ele.meta.title}}</span>
+          </el-menu-item>
+          <!-- <el-menu-item index="/home/chart">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据概览</span>
           </el-menu-item>
@@ -42,7 +46,7 @@
           <el-menu-item index="/home/subject">
             <i class="el-icon-notebook-2"></i>
             <span slot="title">学科列表</span>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-menu>
       </el-aside>
       <el-main class="main">
@@ -92,8 +96,22 @@ export default {
       this.$store.state.userInfo=res.data.data;
       this.imgUrl = this.baseUrl + "/" + this.$store.state.userInfo.avatar;
       this.userName = this.$store.state.userInfo.username;
+      this.$store.state.role=res.data.data.role;
+      if(res.data.data.status==0){
+        this.$message.warning("您的账号已被禁用,请联系管理员");
+        setTimeout(()=>{
+          removeToken("token");
+          this.$router.push("/login");
+        },500)
+      }else{
+        if(!this.$route.meta.rules.includes(res.data.data.role)){
+          this.$message.warning("您无权访问此列表");
+          removeToken("token");
+          this.$router.push("/login")
+        }
+      }
     });
-    this.inPath=this.$route.fullPath;
+    console.log("路由原信息",this.$router);
   }
   // mounted:function(){
   //     if(!getToken('token')){

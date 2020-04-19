@@ -33,7 +33,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="addBlock">+新增学科</el-button>
+          <el-button type="primary" @click="addBlock" v-if="$store.state.role!='学生'">+新增学科</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -54,15 +54,15 @@
 
         <el-table-column label="创建日期" prop="create_time" width="200"></el-table-column>
 
-        <el-table-column label="状态" width="100">
+        <el-table-column label="状态" >
           <template slot-scope="scope">{{scope.row.status==0?"禁用":"启用"}}</template>
         </el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作"  v-if="$store.state.role!='学生'" width="300">
           <template slot-scope="scope">
             <el-button class="btn" @click='editBlock(scope.row)'>编辑</el-button>
             <el-button class="btn" @click="changeStatus(scope.row.id)">{{scope.row.status==1?"禁用":"启用"}}</el-button>
-            <el-button class="btn" @click="remove(scope.row.id)">删除</el-button>
+            <el-button class="btn" @click="remove(scope.row.id)" v-if="$store.state.role.includes('管理')">删除</el-button>
             </template>
         </el-table-column>
       </el-table>
@@ -100,7 +100,7 @@ export default {
         status: ""
       },
       pagination:{
-        size:2,
+        size:10,
         currentPage:1,
         total:400,
       },
@@ -184,6 +184,7 @@ export default {
   },
   created: function() {
     this.getData();
+    console.log("路由原信息2",this.$route);
   }
 };
 </script>

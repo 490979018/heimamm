@@ -13,13 +13,7 @@
 
         <el-form-item label="角色" prop="role_id">
           <el-select v-model="form.role_id"  style="width:150px">
-            <el-option value="2" label="管理员">
-
-            </el-option>
-            <el-option value="3" label="老师">
-
-            </el-option>
-            <el-option value="4" label="学生">
+            <el-option v-for="(value,key,index) in $store.state.roleObj" :key="index" :value="key" :label="value">
 
             </el-option>
           </el-select>
@@ -28,7 +22,7 @@
         <el-form-item>
           <el-button type="primary" @click="search">搜索</el-button>
           <el-button @click="reset">清除</el-button>
-          <el-button type="primary">+ 新增用户</el-button>
+          <el-button type="primary" @click="addBlock">+ 新增用户</el-button>
         </el-form-item>
 
 
@@ -56,9 +50,9 @@
 
         </el-table-column>
 
-        <el-table-column label="角色" width="80">
+        <el-table-column label="角色" width="100">
           <template slot-scope="scope">
-            {{scope.row.role_id==2?"管理员":(scope.row.role_id==3?"老师":"学生")}}
+            {{scope.row.role_id===1?"超级管理员":(scope.row.role_id===2?"管理员":(scope.row.role_id===3?"老师":"学生"))}}
           </template>
         </el-table-column>
 
@@ -75,7 +69,7 @@
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button>编辑</el-button>
+            <el-button @click="editBlock(scope.row)">编辑</el-button>
             <el-button @click="changeStatus(scope.row.id)">
               {{scope.row.status==0?"启用":"禁用"}}
             </el-button>
@@ -96,7 +90,7 @@
         ></el-pagination>
       </div>
     </el-card>
-    <addUser ref="addUser"></addUser>
+    <addUser ref="addUser" @sonSearch='search'  :mode="addOrEdit"></addUser>
     
 
   </div>
@@ -111,6 +105,7 @@ export default {
   },
     data() {
       return {
+        addOrEdit:"add",
         form:{
           role_id:"",
           username:"",
@@ -121,7 +116,7 @@ export default {
         tableData: [],
         pagination:{
           currentPage:1,
-          size:2,
+          size:10,
           total:100,
         }
       }
@@ -131,7 +126,7 @@ export default {
         this.form.page=this.pagination.currentPage;
         this.form.limit=this.pagination.size;
         userSeach(this.form).then((res)=>{
-          console.log(res);
+          // console.log(res);
           this.tableData=res.data.data.items;
           this.pagination.total=res.data.data.pagination.total;
         })
@@ -169,8 +164,24 @@ export default {
             this.search();
           })
         })
-        
-        
+      },
+      addBlock(){
+        this.addOrEdit='add';
+        this.$refs.addUser.dialogFormVisible=true;
+        this.$refs.addUser.form={
+          username:"",
+          email:"",
+          phone:"",
+          role_id:"",
+          status:"",
+          remark:"",
+      };
+      },
+      editBlock(row){
+        this.addOrEdit='edit';
+        this.$refs.addUser.dialogFormVisible=true;
+        this.$refs.addUser.form=JSON.parse(JSON.stringify(row));
+        console.log(this.$refs.addUser.form);
       }
     },
     created:function(){
